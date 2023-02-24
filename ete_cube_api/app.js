@@ -87,6 +87,15 @@ app.post('/addCompany', async (req, res) => {
   }
 });
 
+app.get('/getLastCompanies', async (req, res) => {
+  try {
+    const allComps = await Company.find().sort({date:-1}).limit(3);
+    res.send({ status: 'ok', data: allComps });
+  } catch (error) {
+    res.send({ status: 'error' });
+  }
+});
+
 app.get('/getCompanies', async (req, res) => {
   try {
     const allComps = await Company.find({});

@@ -8,10 +8,10 @@ const HomePage = () => {
   useEffect(() => {
     getCompanies();
     getProducts();
-  }, []);
+  },[]);
 
   const getCompanies = () => {
-    fetch('http://localhost:5000/getCompanies', {
+    fetch('http://localhost:5000/getLastCompanies', {
       method: 'GET',
     })
       .then((res) => res.json())
@@ -20,8 +20,8 @@ const HomePage = () => {
       });
   };
 
-  const getProducts = () => {
-    fetch('http://localhost:5000/getProducts', {
+  const getProducts = async () => {
+    await fetch('http://localhost:5000/getProducts', {
       method: 'GET',
     })
       .then((res) => res.json())
@@ -81,7 +81,7 @@ const HomePage = () => {
       dataIndex: 'company',
       editable: true,
     },
-]
+  ];
 
   return (
     <Card title="EteCube Assignment">
@@ -90,7 +90,12 @@ const HomePage = () => {
         title="Last Companies"
         extra={<a href="companies">More</a>}
       >
-        <Table bordered dataSource={companyData} columns={defaultColumnsComp} />
+        <Table
+          pagination={{ pageSize: 3 }}
+          bordered
+          dataSource={companyData}
+          columns={defaultColumnsComp}
+        />
       </Card>
       <Card
         style={{
@@ -100,7 +105,12 @@ const HomePage = () => {
         title="Last Products"
         extra={<a href="products">More</a>}
       >
-        <Table bordered dataSource={productData} columns={defaultColumnsProd} />
+        <Table
+          pagination={{ pageSize: 3 }}
+          bordered
+          dataSource={productData}
+          columns={defaultColumnsProd}
+        />
       </Card>
     </Card>
   );

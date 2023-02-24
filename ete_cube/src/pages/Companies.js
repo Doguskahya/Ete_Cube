@@ -58,8 +58,8 @@ const Companies = () => {
     getCompanies();
   }, []);
 
-  const getCompanies = () => {
-    fetch('http://localhost:5000/getCompanies', {
+  const getCompanies = async () => {
+    await fetch('http://localhost:5000/getCompanies', {
       method: 'GET',
     })
       .then((res) => res.json())
@@ -92,7 +92,7 @@ const Companies = () => {
           ...item,
           ...row,
         });
-        const updated=newData[index]
+        const updated = newData[index];
         const _id = updated._id;
         const companyName = updated.companyName;
         const incorpCountry = updated.incorpCountry;
@@ -118,7 +118,7 @@ const Companies = () => {
           .then((data) => {
             getCompanies();
           });
-          setEditingKey('');
+        setEditingKey('');
       } else {
         newData.push(row);
         setDataSource(newData);
@@ -135,11 +135,14 @@ const Companies = () => {
       dataIndex: 'companyName',
       width: '30%',
       editable: true,
+      sorter: (a, b) => a.companyName.localeCompare(b.companyName),
+      sortDirections: ['descend'],
     },
     {
       title: 'Company Legal Number',
       dataIndex: 'companyLegalNum',
       editable: true,
+      sorter: (a, b) => a.companyLegalNum - b.companyLegalNum,
     },
     {
       title: 'Incorporation Country',
@@ -264,9 +267,15 @@ const Companies = () => {
 
   return (
     <div>
-      <Button href="home" >HomePage </Button>
-      <Button href="products" >Products </Button>
-      <Button onClick={onAdd}>New Company </Button>
+      <Button className="home-page-button" href="home">
+        HomePage{' '}
+      </Button>
+      <Button className="other-page-button" href="products">
+        Products{' '}
+      </Button>
+      <Button className="new-button" onClick={onAdd} type="primary">
+        New Company{' '}
+      </Button>
       <Form form={form} component={false}>
         <Table
           components={{

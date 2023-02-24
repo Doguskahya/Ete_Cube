@@ -41,8 +41,39 @@
 }
 
 .login-form {
-  max-width: 300px;
+  background-color: rgba(255, 255, 255, 0.33);
+  box-shadow: 0px 8px 32px 0;
+  padding: 0px 16px 16px 16px;
+  border-radius: 16px;
 }
 .login-form-button {
   width: 100%;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-button {
+  float : right;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
+
+.home-page-button {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float :left;
+  color: rgb(182, 167, 148);
+}
+.other-page-button {
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: left;
+  color: rgb(82, 128, 128);
 }

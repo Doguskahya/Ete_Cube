@@ -11,7 +11,6 @@ import {
 } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { dummyProduct } from '../components/constants';
 
 const EditableCell = ({
   editing,
@@ -50,7 +49,8 @@ const EditableCell = ({
 
 const Products = () => {
   const [form] = Form.useForm();
-  const [dataSource, setDataSource] = useState(dummyProduct);
+  const [dataSource, setDataSource] = useState([]);
+  const [comps, setComps] = useState([]);
   const [editingKey, setEditingKey] = useState('');
   const isEditing = (record) => record._id === editingKey;
   const [isAdding, setIsAdding] = useState(false);
@@ -58,10 +58,21 @@ const Products = () => {
 
   useEffect(() => {
     getProducts();
+    getCompanies();
   }, []);
 
-  const getProducts = () => {
-    fetch('http://localhost:5000/getProducts', {
+  const getCompanies = async () => {
+    await fetch('http://localhost:5000/getCompanies', {
+      method: 'GET',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setComps(data.data);
+      });
+  };
+
+  const getProducts = async () => {
+    await fetch('http://localhost:5000/getProducts', {
       method: 'GET',
     })
       .then((res) => res.json())
@@ -140,6 +151,8 @@ const Products = () => {
       dataIndex: 'productName',
       width: '30%',
       editable: true,
+      sorter: (a, b) => a.productName.localeCompare(b.productName),
+      sortDirections: ['descend'],
     },
     {
       title: 'Product Category',
@@ -282,9 +295,15 @@ const Products = () => {
 
   return (
     <div>
-      <Button href="home">HomePage </Button>
-      <Button href="companies">Companies </Button>
-      <Button onClick={onAdd}>New Product </Button>
+      <Button className="home-page-button" href="home">
+        HomePage{' '}
+      </Button>
+      <Button className="other-page-button" href="companies">
+        Companies{' '}
+      </Button>
+      <Button className="new-button" type="primary" onClick={onAdd}>
+        New Product{' '}
+      </Button>
       <Form form={form} component={false}>
         <Table
           components={{
@@ -356,19 +375,20 @@ const Products = () => {
           optionFilterProp="children"
           onChange={selectedChange}
           filterOption={(input, option) =>
-            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            option.props.children
+              .toString()
+              .toLowerCase()
+              .includes(input.toLowerCase())
           }
-          options={[
-            {
-              value: 'jack',
-              label: 'Jack',
-            },
-            {
-              value: 'lucy',
-              label: 'Lucy',
-            },
-          ]}
-        />
+        >
+          {comps.map((item) => {
+            return (
+              <option key={item.id} value={item.companyName}>
+                {item.compayName}
+              </option>
+            );
+          })}
+        </Select>
       </Modal>
     </div>
   );
